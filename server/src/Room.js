@@ -1,3 +1,5 @@
+'use strict';
+
 class Room {
   constructor(name, socket) {
     this.name = name;

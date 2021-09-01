@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "argparse": "^2.0.1",
     "express": "^4.17.1",
     "serialport": "^9.2.0",
     "ws": "^8.0.0"

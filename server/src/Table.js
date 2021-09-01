@@ -1,3 +1,5 @@
+'use strict';
+
 class Courier {
   constructor(socket) {
     this.socket = socket;
