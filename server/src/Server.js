@@ -32,15 +32,7 @@ class Server extends EventEmitter {
     this.http = httpServer;
     this.express = app;
     this.wss = new WebSocket.Server({ server: httpServer });
-    this.port = new SerialPort('/dev/ttyS19', {
-      baudRate: 115200
-    }, err => {
-      if (err != null) {
-        console.error(err);
-        return;
-      }
-      console.log("[PORT] OPENED");
-    });
+    this.port = null;
     // this.port.on("data", (msg) => {
     //   // const data = JSON.stringify(msg.toString);
     //   // this.emit("");
@@ -77,8 +69,17 @@ class Server extends EventEmitter {
     this.express.use(arg);
   }
 
-  listen(port, callback = () => { }) {
+  listen({ port, serialPath }, callback = () => { }) {
     this.http.listen(port, callback);
+    this.port = new SerialPort(serialPath, {
+      baudRate: 115200
+    }, err => {
+      if (err != null) {
+        // console.error(err);
+        throw new Error(err);
+      }
+      console.log("[PORT] OPENED");
+    });
   }
 }
 

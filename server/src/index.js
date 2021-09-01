@@ -2,16 +2,24 @@
 
 const app = require("./app");
 const SerialPort = require("serialport");
-const parser = require("./argsparse");
+const { ArgumentParser } = require("argparse");
+
+const parser = new ArgumentParser({
+  description: "Example"
+});
 
 parser.add_argument("-r", "--run", { help: "Start atau Check Port", default: "start" });
 parser.add_argument("-p", "--port", { help: "Port", type: "int", default: 3030 });
+parser.add_argument("-s", "--serial-port", { help: "Path to Serial Port", required: true });
 
 const args = parser.parse_args();
 const port = args["port"];
 
 if (args["run"] === "start") {
-  app.listen(port, () => {
+  app.listen({
+    port,
+    serialPath: args["serial_port"]
+  }, () => {
     console.log(`\nlistening on *:${port}`);
   });
 } else if (args["run"] === "check-port") {
