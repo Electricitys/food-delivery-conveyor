@@ -68,7 +68,7 @@ function App() {
         <div style={{ fontSize: 25, fontFamily: "monospace" }}>{action}</div>
       </div>
       <div className="buttons">
-        {[1, 2, 3, 4].map((id) =>
+        {[1, 2, 3].map((id) =>
           <Button
             key={id}
             className="button"
