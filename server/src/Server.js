@@ -34,7 +34,7 @@ class Server extends EventEmitter {
       baudRate: 115200
     }, err => {
       if (err != null) {
-        console.log(err);
+        console.error(err);
         return;
       }
       console.log("[PORT] OPENED");
