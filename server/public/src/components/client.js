@@ -12,17 +12,14 @@ export const ClientProvider = ({ children }) => {
     return ws;
   }, []);
 
-  const login = useCallback(() => {
+  const login = useCallback((cb = () => { }) => {
     if (!isConnected) return;
-    const AUTH = {
-      "type": "AUTH",
-      "role": "INTERFACE"
-    }
     if (socket.OPEN) {
       console.log(socket.OPEN, socket.CONNECTING);
-      socket.send(JSON.stringify(AUTH));
+      socket.send("0:C");
     }
     setIsConnected(true);
+    cb();
   }, [isConnected]);
 
   return (

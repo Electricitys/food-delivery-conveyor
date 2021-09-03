@@ -19,33 +19,38 @@ function App() {
   const client = useClient();
   const [list, setList] = useState([]);
   const [action, setAction] = useState("Mengantarkan");
+  const [courierState, setCourierState] = useState(false);
 
   const checkClient = () => {
-    client.send(JSON.stringify({ type: "GET-CLIENT" }));
+    client.send("GET-CLIENT");
   }
 
   useEffect(() => {
     client.on("message", (e) => {
       try {
         const msg = JSON.parse(e.data);
+        console.log(msg);
         switch (msg.type) {
+          case "COURIER":
+            setCourierState(msg.data);
+            break;
           case "CLIENT-LIST":
-            setList(msg.data);
+            setList(msg.data.map((v) => Number(v)));
             break;
           default:
             break;
         }
       } catch (err) { }
-    })
-    client.login();
+    });
+    client.login(() => {
+      checkClient();
+    });
   }, [client]);
 
   const toDapur = (id) => {
-    const data = {
-      type: "TO",
-      data: id
-    }
-    client.send(JSON.stringify(data));
+    const data = `TO:${id}`;
+    console.log(data);
+    client.send(data);
   }
 
   return (
@@ -64,7 +69,7 @@ function App() {
         }}
       >refresh</button>
       <div className="text">
-        <div>Action:</div>
+        <div>{courierState ? "Ready" : "Not Connected"}</div>
         <div style={{ fontSize: 25, fontFamily: "monospace" }}>{action}</div>
       </div>
       <div className="buttons">

@@ -10,7 +10,7 @@ const parser = new ArgumentParser({
 
 parser.add_argument("-r", "--run", { help: "Start atau Check Port", default: "start" });
 parser.add_argument("-p", "--port", { help: "Port", type: "int", default: 3030 });
-parser.add_argument("-s", "--serial-port", { help: "Path to Serial Port", required: true });
+parser.add_argument("-s", "--serial-port", { help: "Path to Serial Port", default: "/dev/ttyS19" });
 
 const args = parser.parse_args();
 const port = args["port"];
