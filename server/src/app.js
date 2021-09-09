@@ -58,6 +58,9 @@ app.on("connection", (ws) => {
           app.control.on("get-client", () => {
             app.emit("control", app.control, { type: "get-client" });
           })
+          app.control.on("abort", () => {
+            app.emit("control", app.control, { type: "abort" });
+          })
           app.control.on("close", () => {
             app.control = null;
           })
@@ -191,6 +194,17 @@ app.on("control", (control, { type, data }) => {
         }
       }
     }
+  } else if (type === "abort") {
+    app.control.servo(1);
+    app.targetRoom = null;
+    if (app.courier !== null) {
+      app.courier.move(1);
+    }
+    app.clients((room)=> {
+      // console.log(val);
+      room.buzzer(1);
+      room.servo(1);
+    });
   }
 });
 

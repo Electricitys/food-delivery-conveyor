@@ -42,6 +42,10 @@ class Server extends EventEmitter {
     });
   }
 
+  clients(cb = () => { }) {
+    this.clientList.forEach(cb);
+  }
+
   use(...args) { return this.express.use(...args) }
 
   listen({ port, serialPath }, callback = () => { }) {

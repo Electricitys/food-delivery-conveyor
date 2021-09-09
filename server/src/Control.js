@@ -19,6 +19,8 @@ class Control extends EventEmitter {
       } else if (msg[0] === "GET-CLIENT") {
         console.log(msg);
         this.emit("get-client");
+      } else if (msg[0] === "ABORT") {
+        this.emit("abort");
       }
     });
     socket.on("close", () => {
@@ -27,7 +29,8 @@ class Control extends EventEmitter {
     });
 
     this.port.on("data", (data) => {
-      console.log("data", data.toString());
+      console.log("buffer data", data);
+      console.log("data", data.toString("ascii"));
       this.emit("data", data);
     });
   }

@@ -17,7 +17,7 @@ class Courier extends EventEmitter {
       console.log("[COURIER] Disconnected");
       this.emit("close");
     });
-    this.publish("1:1");
+    this.publish("1:0");
   }
   publish(data) {
     this.socket.send(data);

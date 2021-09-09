@@ -25,6 +25,10 @@ function App() {
     client.send("GET-CLIENT");
   }
 
+  const abortOperation = () => {
+    client.send("ABORT");
+  }
+
   useEffect(() => {
     client.on("message", (e) => {
       try {
@@ -89,6 +93,10 @@ function App() {
         <Button
           className="button"
           style={{ fontSize: 25 }}
+          onClick={() => {
+            console.log("ABORT");
+            abortOperation();
+          }}
         >ABORT</Button>
       </div>
     </div >
