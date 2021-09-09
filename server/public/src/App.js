@@ -18,7 +18,7 @@ const Button = ({ children, ...props }) => {
 function App() {
   const client = useClient();
   const [list, setList] = useState([]);
-  const [action, setAction] = useState("Mengantarkan");
+  const [action, setAction] = useState("");
   const [courierState, setCourierState] = useState(false);
 
   const checkClient = () => {
@@ -36,6 +36,9 @@ function App() {
             break;
           case "CLIENT-LIST":
             setList(msg.data.map((v) => Number(v)));
+            break;
+          case "STATE":
+            setAction(msg.data);
             break;
           default:
             break;

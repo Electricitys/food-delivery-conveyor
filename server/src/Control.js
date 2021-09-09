@@ -27,7 +27,7 @@ class Control extends EventEmitter {
     });
 
     this.port.on("data", (data) => {
-      console.log(data);
+      console.log("data", data.toString());
       this.emit("data", data);
     });
   }
@@ -39,7 +39,7 @@ class Control extends EventEmitter {
   }
   servo(state) {
     this.state.servo = state;
-    this.send(`1:${state}`);
+    this.send(`0:${state}\n`);
   }
 }
 

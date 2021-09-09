@@ -21,6 +21,7 @@ class Server extends EventEmitter {
       "ROOM": "R",
       "CONTROLLER": "C",
     }
+    this.state = "Stand By";
     this.clientList = new Map();
     this.control = null;
     this.courier = null;
@@ -57,10 +58,11 @@ class Server extends EventEmitter {
     if (this.port) {
       this.port.on("data", (msg) => {
         let data = msg.toString().split(":");
-        if (data[0]) {
-          this.emit("control", this, { type: "proxy", data: data[1] });
+        if (data[0] === '1') {
+          if (this.control) {
+            this.emit("control", this.control, { type: "proxy", data: data[1] });
+          }
         }
-        // console.log("data", msg.toString());
       });
     }
   }

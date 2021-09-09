@@ -76,10 +76,16 @@ app.on("login", ({ type, data, connection }) => {
       if (room !== app.targetRoom) return;
       console.log("tiba");
       if (data) {
-        room.servo(0);
         room.buzzer(0);
         if (app.courier !== null) {
           app.courier.move(0);
+        }
+        if (app.control !== null) {
+          const d = JSON.stringify({
+            type: "STATE",
+            data: "Menunggu ambil pesanan"
+          });
+          app.control.publish(d);
         }
       }
     });
@@ -91,9 +97,15 @@ app.on("login", ({ type, data, connection }) => {
           app.courier.move(1);
         }
         if (app.control !== null) {
-          app.control.servo(1);
+          const d = JSON.stringify({
+            type: "STATE",
+            data: "Kembali ke dapur"
+          });
+          app.control.publish(d);
+          app.control.servo(0);
         }
         app.targetRoom = null;
+        room.servo(1);
         room.buzzer(1);
       }
     });
@@ -137,7 +149,6 @@ app.on("login", ({ type, data, connection }) => {
 })
 
 app.on("control", (control, { type, data }) => {
-  console.log("control", type, data);
   if (type === "get-client") {
     const list = app.clientList.keys();
     const d = JSON.stringify({
@@ -147,18 +158,33 @@ app.on("control", (control, { type, data }) => {
     control.publish(d);
   } else if (type === "to") {
     const room = app.clientList.get(data);
-    // console.log("to", room);
     app.targetRoom = room;
     if (app.courier !== null) {
       app.courier.move(1);
     }
     if (app.control !== null) {
-      app.control.servo(0);
+      const d = JSON.stringify({
+        type: "STATE",
+        data: `Mengantarkan ke Kamar ${data}`
+      });
+      app.control.publish(d);
+      app.control.servo(1);
     }
-    room.servo(1);
+    room.servo(0);
   } else if (type === "proxy") {
-    if (app.targetRoom) {
-      if (data) {
+    if (app.targetRoom === null) {
+      const a = data === '0';
+      if (a) {
+        console.log("proxy data", typeof data, a);
+        console.log("target room", app.targetRoom);
+        if (app.control !== null) {
+          const d = JSON.stringify({
+            type: "STATE",
+            data: `Stand by`
+          });
+          app.control.publish(d);
+          app.control.servo(1);
+        }
         if (app.courier !== null) {
           app.courier.move(0);
           return;
